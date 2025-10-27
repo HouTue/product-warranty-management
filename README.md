@@ -236,23 +236,23 @@ INSERT INTO products_by_serial (serial_number, product_name, purchase_date, warr
 
 
 
--- Ticket đang chờ phân công
+
+
 INSERT INTO warranty_tickets_by_product (serial_number, ticket_id, customer_id, created_at, issue_description, status, technician_id)
 VALUES ('SP0001', 'WR0001', 'CUST001', toTimestamp(now()), 'Máy bị sập nguồn đột ngột', 'pending', null);
 
--- Ticket đã phân công nhưng chưa bắt đầu
+
 INSERT INTO warranty_tickets_by_product (serial_number, ticket_id, customer_id, created_at, issue_description, status, technician_id)
 VALUES ('SP0002', 'WR0002', 'CUST002', toTimestamp(now()), 'Không khởi động được', 'assigned', 'tech01');
 
--- Ticket đang được xử lý
 INSERT INTO warranty_tickets_by_product (serial_number, ticket_id, customer_id, created_at, issue_description, status, technician_id)
 VALUES ('SP0001', 'WR0003', 'CUST001', toTimestamp(now()), 'Màn hình bị sọc', 'in_progress', 'tech02');
 
--- Ticket đã hoàn thành
+
 INSERT INTO warranty_tickets_by_product (serial_number, ticket_id, customer_id, created_at, issue_description, status, technician_id)
 VALUES ('SP0002', 'WR0004', 'CUST002', toTimestamp(now()), 'Lỗi pin đã được thay', 'completed', 'tech01');
 
--- ========== DANH SÁCH KHÁCH HÀNG NGẪU NHIÊN ==========
+
 INSERT INTO customers_by_id (customer_id, full_name, phone, email, address, status) VALUES ('CUST001','Nguyễn Văn An','0912345001','an.nguyen01@gmail.com','Hà Nội, Việt Nam','active');
 INSERT INTO customers_by_id (customer_id, full_name, phone, email, address, status) VALUES ('CUST002','John Smith','0912345002','john.smith@gmail.com','New York, USA','active');
 INSERT INTO customers_by_id (customer_id, full_name, phone, email, address, status) VALUES ('CUST003','Trần Thị Hoa','0912345003','hoa.tran03@gmail.com','TP. Hồ Chí Minh, Việt Nam','active');
