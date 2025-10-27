@@ -53,9 +53,12 @@ namespace NoSQL_QL_BaoHanh.Forms
             };
 
             btnAll = CreateStatusButton("Tất cả", "all");
-            btnPending = CreateStatusButton("Chờ xử lý", "pending");
+            btnPending = CreateStatusButton("Chờ xử lý", "assigned");
             btnInProgress = CreateStatusButton("Đang sửa", "in_progress");
             btnCompleted = CreateStatusButton("Hoàn thành", "completed");
+
+
+
 
             statusPanel.Controls.AddRange(new Control[] { btnAll, btnPending, btnInProgress, btnCompleted });
 
@@ -97,6 +100,22 @@ namespace NoSQL_QL_BaoHanh.Forms
 
         private Button CreateStatusButton(string text, string statusValue)
         {
+            //var btn = new Button()
+            //{
+            //    Text = text,
+            //    Tag = statusValue,
+            //    Size = new Size(150, 40),
+            //    BackColor = Color.FromArgb(0, 120, 215),
+            //    ForeColor = Color.White,
+            //    FlatStyle = FlatStyle.Flat
+            //};
+            //btn.FlatAppearance.BorderSize = 0;
+            //btn.Margin = new Padding(5);
+            //btn.Click += async (s, e) =>
+            //{
+            //    await LoadRepairs(statusValue);
+            //};
+            //return btn;
             var btn = new Button()
             {
                 Text = text,
@@ -108,9 +127,18 @@ namespace NoSQL_QL_BaoHanh.Forms
             };
             btn.FlatAppearance.BorderSize = 0;
             btn.Margin = new Padding(5);
+
+            //btn.Click += async (s, e) =>
+            //{
+            //    string status = statusValue;
+
+            //    // Map trạng thái hiển thị → trạng thái thực trong DB
+            //    if (status == "pending") status = "assigned"; // Khi kỹ thuật viên nhận
+            //    await LoadRepairs(status);
+            //};
             btn.Click += async (s, e) =>
             {
-                await LoadRepairs(statusValue);
+                await LoadRepairs(statusValue); // Gọi hàm lọc theo trạng thái
             };
             return btn;
         }
@@ -150,7 +178,22 @@ namespace NoSQL_QL_BaoHanh.Forms
         //}
         private async Task LoadRepairs(string statusFilter = "all")
         {
+            //dgvRepairs.Rows.Clear();
+            //var tickets = await _ticketRepo.GetTicketsByTechnicianAsync(_technicianId, statusFilter);
+
+            //foreach (var t in tickets)
+            //{
+            //    dgvRepairs.Rows.Add(
+            //        t.TicketId,
+            //        t.SerialNumber,
+            //        t.CustomerId,
+            //        t.CreatedAt.ToString("yyyy-MM-dd HH:mm"),
+            //        ConvertStatusToVietnamese(t.Status)
+            //    );
+            //}
             dgvRepairs.Rows.Clear();
+
+            // Lấy danh sách theo trạng thái
             var tickets = await _ticketRepo.GetTicketsByTechnicianAsync(_technicianId, statusFilter);
 
             foreach (var t in tickets)
@@ -163,16 +206,30 @@ namespace NoSQL_QL_BaoHanh.Forms
                     ConvertStatusToVietnamese(t.Status)
                 );
             }
-        }
 
+            HighlightSelectedFilter(statusFilter);
+        }
+        private void HighlightSelectedFilter(string selectedStatus)
+        {
+            foreach (Control c in statusPanel.Controls)
+            {
+                if (c is Button btn)
+                {
+                    if ((string)btn.Tag == selectedStatus || (selectedStatus == "all" && (string)btn.Tag == "all"))
+                        btn.BackColor = Color.FromArgb(0, 180, 120); // màu đang chọn
+                    else
+                        btn.BackColor = Color.FromArgb(0, 120, 215); // màu mặc định
+                }
+            }
+        }
 
         private string ConvertStatusToVietnamese(string status)
         {
             return status switch
-            {
-                "pending" => "Chờ xử lý",
+            { 
                 "in_progress" => "Đang sửa",
                 "completed" => "Hoàn thành",
+                "assigned" => "Đã giao",
                 _ => status
             };
         }
