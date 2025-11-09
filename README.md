@@ -12,7 +12,7 @@ CREATE TABLE users_by_username (
     role TEXT,
     status TEXT
 );
-
+CREATE INDEX ON users_by_username(role);
 CREATE TABLE IF NOT EXISTS products_by_serial (
     serial_number TEXT PRIMARY KEY,
     product_name TEXT,

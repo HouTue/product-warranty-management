@@ -22,7 +22,7 @@ namespace NoSQL_QL_BaoHanh.Auth
             var technicians = new List<UserRecord>();
             try
             {
-                var query = "SELECT username, full_name, role, status FROM users_by_username WHERE role = 'tech' ALLOW FILTERING;";
+                var query = "SELECT username, full_name, role, status FROM users_by_username WHERE role = 'tech';";
                 var result = await _session.ExecuteAsync(new SimpleStatement(query));
 
                 foreach (var row in result)
@@ -279,7 +279,7 @@ namespace NoSQL_QL_BaoHanh.Auth
                 else
                 {
                     result = await _session.ExecuteAsync(new SimpleStatement(
-                        "SELECT technician_id, ticket_id, serial_number, customer_id, created_at, issue_description, status FROM warranty_tickets_by_technician WHERE technician_id = ? AND status = ?", technicianId, status));
+                        "SELECT technician_id, ticket_id, serial_number, customer_id, created_at, issue_description, status FROM warranty_tickets_by_technician WHERE technician_id = ? AND status = ? ALLOW FILTERING;", technicianId, status));
                 }
 
                 foreach (var row in result)

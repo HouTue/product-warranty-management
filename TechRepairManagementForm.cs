@@ -282,13 +282,17 @@ namespace NoSQL_QL_BaoHanh.Forms
             string ticketId = dgvRepairs.SelectedRows[0].Cells["TicketId"].Value.ToString();
             var tickets = await _ticketRepo.GetTicketsByTechnicianAsync(_technicianId);
             var selectedTicket = tickets.FirstOrDefault(t => t.TicketId == ticketId);
-
+            var status = selectedTicket.Status.ToString();
             if (selectedTicket == null)
             {
                 MessageBox.Show("Không tìm thấy dữ liệu phiếu!", "Lỗi");
                 return;
             }
-
+            if (status == "completed")
+            {
+                MessageBox.Show("Không thể chuyển trạng thái khi đã hoàn thành");
+                return;
+            }    
             // Tạo bản ghi REPAIR ban đầu
             var repairRecord = new RepairRecord
             {
